@@ -1,0 +1,1555 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+<meta http-equiv="keywords" content="web hosting, hosting, online services, domain names, domains" />
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+<meta http-equiv="description" content="web hosting, hosting, online services, domain names, domains" />
+<link href="/notes/css/style.css" rel="stylesheet" type="text/css" />
+<title>Battleship with Han</title>
+<style>
+ #table_container{width:300px;margin:0 auto;}
+.a1 {
+        background:      #3d85c6;
+        background:      -webkit-linear-gradient(#3d85c6, #073763);
+        background:      linear-gradient(#3d85c6, #073763);
+        border-radius:   5px;
+        color:           #fff;
+        display:         inline-block;
+        padding:         8px 20px;
+        font:            normal 700 24px/1 "Calibri", sans-serif;
+        text-align:      center;
+        text-shadow:     1px 1px 0 #000;
+        text-decoration: none
+}
+.a2 {
+        float:         right;
+        background:    #c64c3d;
+        background:    -webkit-linear-gradient(#c64c3d, #631407);
+        background:    linear-gradient(#c64c3d, #631407);
+        border-radius: 5px;
+        color:         #fff;
+        padding:       0px 10px;
+        font:          normal 700 16px/1 "Calibri", sans-serif;
+        text-shadow:   1px 1px 0 #000;
+        text-decoration: none
+}
+p1 {
+        font:            normal 700 24px/1 "Calibri", sans-serif;
+        display:         inline-block;
+        text-align:      center;
+        color:           #fff;
+}
+#userboard {
+    border: 1px solid black;
+}
+#enemyboard {
+    border: 1px solid black;
+}
+table {
+    border-collapse: collapse;
+}
+.enemyCell {
+    height: 23px;
+    width: 23px;
+}
+.friendlyCell {
+    height: 23px;
+    width: 23px;
+}
+.sideCell {
+    height: 23px;
+    width: 23px;
+}
+</style>
+</head>
+<body body style="background-color:SkyBlue;">   
+<body body style="background-color:SkyBlue;">  
+<h1 float="left" style="font-family:Arial Black; color:brown; ">Han: The Battleship AI
+  <a href="login.html" class="a2">Log In</a></h1>
+<div class="btn-group" role="group">
+  <a href="index.html" class="a1">Home</a>    
+  <a href="game.php" class="a1">Game</a>   
+  <a href="ranking.php" class="a1">Ranking</a> 
+</div>
+<br><br>
+<center>
+<p id="line1">Error: Game failed to load or Javascript is not installed and enabled.</p>
+<p id="line2"><br></p>
+<p id="line3"><br></p>
+<p id="line4"><br></p>
+<p id="line5"><br></p>
+</center>
+
+<table id="gameboards" align="center" cellspacing="0" cellpadding="0">
+<td width="100">
+    <table float="left" border="1" id="SideTable">
+          <tr>
+            <td class="sideCell" id="S_A1"></td>
+            <td class="sideCell" id="S_A2"></td>
+            <td class="sideCell" id="S_A3"></td>
+          </tr>
+          <tr>
+            <td class="sideCell" id="S_B1"></td>
+            <td class="sideCell" id="S_B2"></td>
+            <td class="sideCell" id="S_B3"></td>
+          </tr>
+          <tr>
+            <td class="sideCell" id="S_C1"></td>
+            <td class="sideCell" id="S_C2"></td>
+            <td class="sideCell" id="S_C3"></td>
+          </tr>
+          <tr>
+            <td class="sideCell" id="S_D1"></td>
+            <td class="sideCell" id="S_D2"></td>
+            <td class="sideCell" id="S_D3"></td>
+          </tr>
+          <tr>
+            <td class="sideCell" id="S_E1"></td>
+            <td class="sideCell" id="S_E2"></td>
+            <td class="sideCell" id="S_E3"></td>
+          </tr>
+          <tr>
+            <td class="sideCell" id="S_F1"></td>
+            <td class="sideCell" id="S_F2"></td>
+            <td class="sideCell" id="S_F3"></td>
+          </tr>
+          <tr>
+            <td class="sideCell" id="S_G1"></td>
+            <td class="sideCell" id="S_G2"></td>
+            <td class="sideCell" id="S_G3"></td>
+          </tr>
+          <tr>
+            <td class="sideCell" id="S_H1"></td>
+            <td class="sideCell" id="S_H2"></td>
+            <td class="sideCell" id="S_H3"></td>
+          </tr>
+          <tr>
+            <td class="sideCell" id="S_I1"></td>
+            <td class="sideCell" id="S_I2"></td>
+            <td class="sideCell" id="S_I3"></td>
+          </tr>
+          <tr>
+            <td class="sideCell" id="S_J1"></td>
+            <td class="sideCell" id="S_J2"></td>
+            <td class="sideCell" id="S_J3"></td>
+          </tr>
+    </table>
+</td>
+<td border="0" body style="background-color:#3F48CC">
+    <div id="userboard">
+        <table float="left" border="1">
+          <tr>
+            <td class="friendlyCell" id="P_A1"></td>
+            <td class="friendlyCell" id="P_A2"></td>
+            <td class="friendlyCell" id="P_A3"></td>
+            <td class="friendlyCell" id="P_A4"></td>
+            <td class="friendlyCell" id="P_A5"></td>
+            <td class="friendlyCell" id="P_A6"></td>
+            <td class="friendlyCell" id="P_A7"></td>
+            <td class="friendlyCell" id="P_A8"></td>
+            <td class="friendlyCell" id="P_A9"></td>
+            <td class="friendlyCell" id="P_A0"></td>
+          </tr>
+          <tr>
+            <td class="friendlyCell" id="P_B1"></td>
+            <td class="friendlyCell" id="P_B2"></td>
+            <td class="friendlyCell" id="P_B3"></td>
+            <td class="friendlyCell" id="P_B4"></td>
+            <td class="friendlyCell" id="P_B5"></td>
+            <td class="friendlyCell" id="P_B6"></td>
+            <td class="friendlyCell" id="P_B7"></td>
+            <td class="friendlyCell" id="P_B8"></td>
+            <td class="friendlyCell" id="P_B9"></td>
+            <td class="friendlyCell" id="P_B0"></td>
+          </tr>
+          <tr>
+            <td class="friendlyCell" id="P_C1"></td>
+            <td class="friendlyCell" id="P_C2"></td>
+            <td class="friendlyCell" id="P_C3"></td>
+            <td class="friendlyCell" id="P_C4"></td>
+            <td class="friendlyCell" id="P_C5"></td>
+            <td class="friendlyCell" id="P_C6"></td>
+            <td class="friendlyCell" id="P_C7"></td>
+            <td class="friendlyCell" id="P_C8"></td>
+            <td class="friendlyCell" id="P_C9"></td>
+            <td class="friendlyCell" id="P_C0"></td>
+          </tr>
+          <tr>
+            <td class="friendlyCell" id="P_D1"></td>
+            <td class="friendlyCell" id="P_D2"></td>
+            <td class="friendlyCell" id="P_D3"></td>
+            <td class="friendlyCell" id="P_D4"></td>
+            <td class="friendlyCell" id="P_D5"></td>
+            <td class="friendlyCell" id="P_D6"></td>
+            <td class="friendlyCell" id="P_D7"></td>
+            <td class="friendlyCell" id="P_D8"></td>
+            <td class="friendlyCell" id="P_D9"></td>
+            <td class="friendlyCell" id="P_D0"></td>
+          </tr>
+          <tr>
+            <td class="friendlyCell" id="P_E1"></td>
+            <td class="friendlyCell" id="P_E2"></td>
+            <td class="friendlyCell" id="P_E3"></td>
+            <td class="friendlyCell" id="P_E4"></td>
+            <td class="friendlyCell" id="P_E5"></td>
+            <td class="friendlyCell" id="P_E6"></td>
+            <td class="friendlyCell" id="P_E7"></td>
+            <td class="friendlyCell" id="P_E8"></td>
+            <td class="friendlyCell" id="P_E9"></td>
+            <td class="friendlyCell" id="P_E0"></td>
+          </tr>
+          <tr>
+            <td class="friendlyCell" id="P_F1"></td>
+            <td class="friendlyCell" id="P_F2"></td>
+            <td class="friendlyCell" id="P_F3"></td>
+            <td class="friendlyCell" id="P_F4"></td>
+            <td class="friendlyCell" id="P_F5"></td>
+            <td class="friendlyCell" id="P_F6"></td>
+            <td class="friendlyCell" id="P_F7"></td>
+            <td class="friendlyCell" id="P_F8"></td>
+            <td class="friendlyCell" id="P_F9"></td>
+            <td class="friendlyCell" id="P_F0"></td>
+          </tr>
+          <tr>
+            <td class="friendlyCell" id="P_G1"></td>
+            <td class="friendlyCell" id="P_G2"></td>
+            <td class="friendlyCell" id="P_G3"></td>
+            <td class="friendlyCell" id="P_G4"></td>
+            <td class="friendlyCell" id="P_G5"></td>
+            <td class="friendlyCell" id="P_G6"></td>
+            <td class="friendlyCell" id="P_G7"></td>
+            <td class="friendlyCell" id="P_G8"></td>
+            <td class="friendlyCell" id="P_G9"></td>
+            <td class="friendlyCell" id="P_G0"></td>
+          </tr>
+          <tr>
+            <td class="friendlyCell" id="P_H1"></td>
+            <td class="friendlyCell" id="P_H2"></td>
+            <td class="friendlyCell" id="P_H3"></td>
+            <td class="friendlyCell" id="P_H4"></td>
+            <td class="friendlyCell" id="P_H5"></td>
+            <td class="friendlyCell" id="P_H6"></td>
+            <td class="friendlyCell" id="P_H7"></td>
+            <td class="friendlyCell" id="P_H8"></td>
+            <td class="friendlyCell" id="P_H9"></td>
+            <td class="friendlyCell" id="P_H0"></td>
+          </tr>
+          <tr>
+            <td class="friendlyCell" id="P_I1"></td>
+            <td class="friendlyCell" id="P_I2"></td>
+            <td class="friendlyCell" id="P_I3"></td>
+            <td class="friendlyCell" id="P_I4"></td>
+            <td class="friendlyCell" id="P_I5"></td>
+            <td class="friendlyCell" id="P_I6"></td>
+            <td class="friendlyCell" id="P_I7"></td>
+            <td class="friendlyCell" id="P_I8"></td>
+            <td class="friendlyCell" id="P_I9"></td>
+            <td class="friendlyCell" id="P_I0"></td>
+          </tr>
+          <tr>
+            <td class="friendlyCell" id="P_J1"></td>
+            <td class="friendlyCell" id="P_J2"></td>
+            <td class="friendlyCell" id="P_J3"></td>
+            <td class="friendlyCell" id="P_J4"></td>
+            <td class="friendlyCell" id="P_J5"></td>
+            <td class="friendlyCell" id="P_J6"></td>
+            <td class="friendlyCell" id="P_J7"></td>
+            <td class="friendlyCell" id="P_J8"></td>
+            <td class="friendlyCell" id="P_J9"></td>
+            <td class="friendlyCell" id="P_J0"></td>
+          </tr>
+        </table>
+        
+    </div>
+    </td>
+    <td width="100">
+    </td>
+    <td border="0" body style="background-color:#3F48CC">
+    <div>
+       <table id="enemyboard" float="left" border="1">
+          <tr>
+            <td class="enemyCell" id="H_A1"></td>
+            <td class="enemyCell" id="H_A2"></td>
+            <td class="enemyCell" id="H_A3"></td>
+            <td class="enemyCell" id="H_A4"></td>
+            <td class="enemyCell" id="H_A5"></td>
+            <td class="enemyCell" id="H_A6"></td>
+            <td class="enemyCell" id="H_A7"></td>
+            <td class="enemyCell" id="H_A8"></td>
+            <td class="enemyCell" id="H_A9"></td>
+            <td class="enemyCell" id="H_A0"></td>
+          </tr>
+          <tr>
+            <td class="enemyCell" id="H_B1"></td>
+            <td class="enemyCell" id="H_B2"></td>
+            <td class="enemyCell" id="H_B3"></td>
+            <td class="enemyCell" id="H_B4"></td>
+            <td class="enemyCell" id="H_B5"></td>
+            <td class="enemyCell" id="H_B6"></td>
+            <td class="enemyCell" id="H_B7"></td>
+            <td class="enemyCell" id="H_B8"></td>
+            <td class="enemyCell" id="H_B9"></td>
+            <td class="enemyCell" id="H_B0"></td>
+          </tr>
+          <tr>
+            <td class="enemyCell" id="H_C1"></td>
+            <td class="enemyCell" id="H_C2"></td>
+            <td class="enemyCell" id="H_C3"></td>
+            <td class="enemyCell" id="H_C4"></td>
+            <td class="enemyCell" id="H_C5"></td>
+            <td class="enemyCell" id="H_C6"></td>
+            <td class="enemyCell" id="H_C7"></td>
+            <td class="enemyCell" id="H_C8"></td>
+            <td class="enemyCell" id="H_C9"></td>
+            <td class="enemyCell" id="H_C0"></td>
+          </tr>
+          <tr>
+            <td class="enemyCell" id="H_D1"></td>
+            <td class="enemyCell" id="H_D2"></td>
+            <td class="enemyCell" id="H_D3"></td>
+            <td class="enemyCell" id="H_D4"></td>
+            <td class="enemyCell" id="H_D5"></td>
+            <td class="enemyCell" id="H_D6"></td>
+            <td class="enemyCell" id="H_D7"></td>
+            <td class="enemyCell" id="H_D8"></td>
+            <td class="enemyCell" id="H_D9"></td>
+            <td class="enemyCell" id="H_D0"></td>
+          </tr>
+          <tr>
+            <td class="enemyCell" id="H_E1"></td>
+            <td class="enemyCell" id="H_E2"></td>
+            <td class="enemyCell" id="H_E3"></td>
+            <td class="enemyCell" id="H_E4"></td>
+            <td class="enemyCell" id="H_E5"></td>
+            <td class="enemyCell" id="H_E6"></td>
+            <td class="enemyCell" id="H_E7"></td>
+            <td class="enemyCell" id="H_E8"></td>
+            <td class="enemyCell" id="H_E9"></td>
+            <td class="enemyCell" id="H_E0"></td>
+          </tr>
+          <tr>
+            <td class="enemyCell" id="H_F1"></td>
+            <td class="enemyCell" id="H_F2"></td>
+            <td class="enemyCell" id="H_F3"></td>
+            <td class="enemyCell" id="H_F4"></td>
+            <td class="enemyCell" id="H_F5"></td>
+            <td class="enemyCell" id="H_F6"></td>
+            <td class="enemyCell" id="H_F7"></td>
+            <td class="enemyCell" id="H_F8"></td>
+            <td class="enemyCell" id="H_F9"></td>
+            <td class="enemyCell" id="H_F0"></td>
+          </tr>
+          <tr>
+            <td class="enemyCell" id="H_G1"></td>
+            <td class="enemyCell" id="H_G2"></td>
+            <td class="enemyCell" id="H_G3"></td>
+            <td class="enemyCell" id="H_G4"></td>
+            <td class="enemyCell" id="H_G5"></td>
+            <td class="enemyCell" id="H_G6"></td>
+            <td class="enemyCell" id="H_G7"></td>
+            <td class="enemyCell" id="H_G8"></td>
+            <td class="enemyCell" id="H_G9"></td>
+            <td class="enemyCell" id="H_G0"></td>
+          </tr>
+          <tr>
+            <td class="enemyCell" id="H_H1"></td>
+            <td class="enemyCell" id="H_H2"></td>
+            <td class="enemyCell" id="H_H3"></td>
+            <td class="enemyCell" id="H_H4"></td>
+            <td class="enemyCell" id="H_H5"></td>
+            <td class="enemyCell" id="H_H6"></td>
+            <td class="enemyCell" id="H_H7"></td>
+            <td class="enemyCell" id="H_H8"></td>
+            <td class="enemyCell" id="H_H9"></td>
+            <td class="enemyCell" id="H_H0"></td>
+          </tr>
+          <tr>
+            <td class="enemyCell" id="H_I1"></td>
+            <td class="enemyCell" id="H_I2"></td>
+            <td class="enemyCell" id="H_I3"></td>
+            <td class="enemyCell" id="H_I4"></td>
+            <td class="enemyCell" id="H_I5"></td>
+            <td class="enemyCell" id="H_I6"></td>
+            <td class="enemyCell" id="H_I7"></td>
+            <td class="enemyCell" id="H_I8"></td>
+            <td class="enemyCell" id="H_I9"></td>
+            <td class="enemyCell" id="H_I0"></td>
+          </tr>
+          <tr>
+            <td class="enemyCell" id="H_J1"></td>
+            <td class="enemyCell" id="H_J2"></td>
+            <td class="enemyCell" id="H_J3"></td>
+            <td class="enemyCell" id="H_J4"></td>
+            <td class="enemyCell" id="H_J5"></td>
+            <td class="enemyCell" id="H_J6"></td>
+            <td class="enemyCell" id="H_J7"></td>
+            <td class="enemyCell" id="H_J8"></td>
+            <td class="enemyCell" id="H_J9"></td>
+            <td class="enemyCell" id="H_J0"></td>
+          </tr>
+        </table>
+      </div>
+    </td>
+    <td width="100">
+    </td>
+</table>
+
+<center>
+<p>Currently running Han version 0.5</p>
+<p>&copy; 2016 Alexander Giris</p>
+</center>
+
+<script>
+
+function init() {
+    var currentCookie=document.cookie;
+    var subCookies=currentCookie.split(';');
+    var username="";
+    for (var x=0;x<subCookies.length;x++) {
+        if (subCookies[x].indexOf("username=")>=0) {
+            username=currentCookie.substring(currentCookie.indexOf("username=")+9);
+            break;
+        }
+    }
+    if (!username) 
+        document.getElementById("line1").innerHTML = "You must be logged in to play.";
+    else {
+        var GC=new GameController(username);
+        
+    }
+}
+function intToLetter(x) {
+    if (x<1||x>9) return "J";
+    return "_ABCDEFGHI".charAt(x);
+}
+function letterToInt(x) {
+    return "_ABCDEFGHIJ".indexOf(x);
+}
+function getCell(x,y,type) {
+    var ID;
+    if (type=="friendlyCell") ID="#P_";
+    if (type=="enemyCell") ID="#H_";
+    if (type=="sideCell") ID="#S_";
+    ID+=intToLetter(y);
+    ID+=(x%10);
+    return document.querySelector(ID);
+}
+function validPlacement(s,d,t) { //Can ship s facing downward if d is true be placed on tile t
+        var x_coord=parseInt(t.id.charAt(3));
+        var y_coord=letterToInt(t.id.charAt(2));
+        if (d&&y_coord+s.size-1>10||!d&&(x_coord===0||((t.className=="sideCell"&&x_coord+s.size-1>3)||x_coord+s.size-1>10))) return false;
+        else {
+            for (var x=0;x<s.size;x++) {
+                if (getCell(x_coord,y_coord,t.className).shipz) return false;
+                if (d) y_coord++;
+                else x_coord++;
+            }
+        }
+        return true;
+}
+function undraw(s,d,t) {
+        var x_coord=parseInt(t.id.charAt(3));
+        var y_coord=letterToInt(t.id.charAt(2));
+        var cellType=t.className;
+        for (var x=0;x<s.size;x++) {
+            if (y_coord>10||(cellType=="sideCell"&&x_coord>3)||x_coord>10) break;
+            var tempCell=getCell(x_coord,y_coord,cellType);
+            if ((tempCell.shipz)&&tempCell.shipz==s) {
+                tempCell.shipz="";
+                tempCell.style.background="";
+            }
+            if (d) y_coord++;
+            else x_coord++;
+        }
+}
+function ship(name,size,homeTile) {
+    this.found=false;
+    this.name=name;
+    this.letterCode=name.charAt(0);
+    this.size=size;
+    this.numHits=0;
+    this.homeTile=homeTile;
+    this.hits=new Array(size);
+    for (var x=0;x<size;x++) {
+       this.hits[x]=false;
+    }
+    this.downward=true;
+    this.removeGreen=function() {
+        this.homeTile.style.background=this.homeTile.style.background.replace("green","");
+    };
+    this.reset=function() {
+        this.numHits=0;
+        this.downward=true;
+        this.found=false;
+    };
+    this.hit=function(cell) {
+        if (cell.shipz!=this) return;
+        if (!this.found) {
+            this.yellowify();
+            this.found=true;
+        }
+        cell.style.background=cell.style.background.replace(".bmp","red.bmp");
+        cell.style.background=cell.style.background.replace("yellow","");
+    };
+    this.reveal=function(cell,hit) {
+        if (cell.shipz!=this) return;
+        var x_coord=parseInt(this.homeTile.id.charAt(3));
+        if (x_coord===0) x_coord=10;
+        var y_coord=letterToInt(this.homeTile.id.charAt(2));
+        var x_coord2=parseInt(cell.id.charAt(3));
+        if (x_coord2===0) x_coord2=10;
+        var y_coord2=letterToInt(cell.id.charAt(2));
+        var num=y_coord2+x_coord2-x_coord-y_coord+1;
+        if (hit) cell.style.background=cell.style.background.replace(".bmp","red.bmp");
+        cell.style.background=cell.style.background.replace("yellow","");
+        if (this.downward) {
+          cell.style.background="url('vertImg/"+this.letterCode+(num)+".bmp')";
+        }
+        else {
+          cell.style.background="url('horizImg/"+this.letterCode+(num)+".bmp')";
+        }
+      	if (hit) cell.style.background=cell.style.background.replace(".bmp","red.bmp");
+    };
+    this.yellowify=function() {
+        var x_coord=parseInt(this.homeTile.id.charAt(3));
+        if (x_coord===0) x_coord=10;
+        var y_coord=letterToInt(this.homeTile.id.charAt(2));
+        for (x=0;x<this.size;x++) {
+            var currentCell=getCell(x_coord,y_coord,"friendlyCell");
+            currentCell.style.background=currentCell.style.background.replace(".bmp","yellow.bmp");
+            if (this.downward) {
+                y_coord++;
+            }
+            else {
+                x_coord++;
+            }
+        }
+    };
+    this.drawDeadShip=function() {
+        var x_coord=parseInt(this.homeTile.id.charAt(3));
+        if (x_coord===0) x_coord=10;
+        var y_coord=letterToInt(this.homeTile.id.charAt(2));
+        var cellType=this.homeTile.className;
+        for (x=0;x<this.size;x++) {
+        var currentCell=getCell(x_coord,y_coord,"enemyCell");
+            if (this.downward) {
+                currentCell.style.background="url('vertImg/"+this.letterCode+(x+1)+"red.bmp')";
+                y_coord++;
+            }
+            else {
+                currentCell.style.background="url('horizImg/"+this.letterCode+(x+1)+"red.bmp')";
+                x_coord++;
+            }
+        }
+    };
+    this.draw=function(cell) {
+      var x;
+    //Remove current drawing
+    undraw(this,this.downward,this.homeTile);
+        this.homeTile=cell;
+        var x_coord=parseInt(cell.id.charAt(3));
+        if (x_coord===0) x_coord=10;
+        var y_coord=letterToInt(cell.id.charAt(2));
+        var cellType=this.homeTile.className;
+        var VP=validPlacement(this,this.downward,cell);
+        for (x=0;x<this.size;x++) {
+            if (y_coord>10||(cellType=="sideCell"&&x_coord>3)||x_coord>10) break;
+            var currentCell=getCell(x_coord,y_coord,cellType);
+            if (currentCell.shipz) continue;
+            currentCell.shipz=this;
+          var imgname;
+            if (this.downward) {
+                imgname="vertImg/"+this.letterCode+(x+1);
+                if (!VP) imgname+="red";
+                else if (x===0) imgname+="green";
+                currentCell.style.background="url('"+imgname+".bmp')";
+                y_coord++;
+            }
+            else {
+                imgname="horizImg/"+this.letterCode+(x+1);
+                if (!VP) imgname+="red";
+                else if (x===0) imgname+="green";
+                currentCell.style.background="url('"+imgname+".bmp')";
+                x_coord++;
+            }
+        }
+    };
+}
+function shipGrid(size,weight) {
+this.shout=function() {
+   alert("Hello "+size); alert(Hgrid);alert(Vgrid);
+
+}
+    var sunk=false;
+    
+    var space=10-size+1;
+    var remaining=size;
+    var found=false;
+    var baseProb=1/(2*10*space);
+    var Vgrid=[[],[],[],[],[],[],[],[],[],[]];
+    var Hgrid=[];
+    for (var x=0;x<10;x++) {
+        Vgrid[x].length=space;
+        for (var y=0;y<space;y++) {
+            Vgrid[x][y]=baseProb*weight;
+        }
+    }
+    this.isSunk=function() {
+        var result= (!sunk&&remaining===0)
+        if (result) sunk=true;
+        return result;
+    }
+    this.getRemainingOption=function() {
+        for (var x=0;x<10;x++) {
+            for (var y=0;y<space;y++) {
+                if (Vgrid[x][y]>0) return (100+10*y+x);
+            }
+        }
+        for (var x=0;x<space;x++) {
+            for (var y=0;y<10;y++) {
+                if (Hgrid[x][y]>0) return (10*y+x);
+            }
+        }
+    }
+    this.applyOtherShip=function(shipTile, shipSize,distIndexes) {
+        for (var x=0;x<10;x++) {
+            for (var y=0;y<space;y++) {
+                var di=distIndex(100+10*y+x,shipTile,size,shipSize);
+                if (di===0) Vgrid[x][y]*=(0.001+distIndexes[0]*2);
+                if (di===1) Vgrid[x][y]*=(0.01+distIndexes[1]*2);
+            }
+        }
+        for (var x=0;x<space;x++) {
+            for (var y=0;y<10;y++) {
+                var di=distIndex(10*y+x,shipTile,size,shipSize);
+                if (di===0) Hgrid[x][y]*=(0.001+distIndexes[0]*2);
+                if (di===1) Hgrid[x][y]*=(0.01+distIndexes[1]*2);
+            }
+        }
+    }
+    this.hunt=function() {
+        return (found&&remaining>0);
+    }
+    this.numLeft=function() {return remaining;}
+    Hgrid.length=space;
+    for (var x=0;x<space;x++) {
+        Hgrid[x]=[];
+        Hgrid[x].length=10;
+        for (var y=0;y<10;y++) {
+            Hgrid[x][y]=baseProb*weight;
+        }
+    }
+    this.changeHWeight=function(HWeight) {
+        if (HWeight<.1) HWeight=.1;
+        if (HWeight>.9) HWeight=.9;
+        for (var x=0;x<10;x++) {
+            for (var y=0;y<space;y++) {
+                Vgrid[x][y]*=2*(1-HWeight);
+            }
+        }
+        for (var x=0;x<space;x++) {
+            for (var y=0;y<10;y++) {
+                Hgrid[x][y]*=2*HWeight;
+            }
+        }
+    };
+    var balance=function() {
+        var sum=0;
+        var desiredSum=weight;
+        if (found) desiredSum*=1000;
+        for (var x=0;x<10;x++) {
+            for (var y=0;y<space;y++) {
+                sum+= Vgrid[x][y];
+            }
+        }
+        for (var x=0;x<space;x++) {
+            for (var y=0;y<10;y++) {
+                sum+= Hgrid[x][y];
+            }
+        }
+        var divisor=sum/desiredSum;
+        for (var x=0;x<10;x++) {
+            for (var y=0;y<space;y++) {
+                Vgrid[x][y]/=divisor;
+            }
+        }
+        for (var x=0;x<space;x++) {
+            for (var y=0;y<10;y++) {
+                sum+= Hgrid[x][y]/=divisor;
+            }
+        }
+    };
+    this.prob=function(xi,yi) {
+        var ret=0;
+        var x=xi; var y=yi;
+        for (var iter=0;iter<size&&y>=0;iter++) {
+            if (y<space) ret+=Vgrid[xi][y];
+            y--;
+        }
+        for (var iter=0;iter<size&&x>=0;iter++) {
+            if (x<space) ret+=Hgrid[x][yi];
+            x--;
+        }
+        return ret;
+    };
+    this.eliminate=function(xi,yi) {
+        if (remaining>0) {
+            var x=xi; var y=yi;
+            for (var iter=0;iter<size&&y>=0;iter++) {
+                if (y<space) Vgrid[xi][y]=0;
+                y--;
+            }
+            for (var iter=0;iter<size&&x>=0;iter++) {
+                if (x<space) Hgrid[x][yi]=0;
+                x--;
+            }
+            balance();
+        }
+    };
+    this.needs=function(xi,yi) {
+        found=true;
+        remaining--;
+        for (var x=0;x<10;x++) {
+            for (var y=0;y<space;y++) {
+                if (x!=xi||(yi<y||yi-size>=y)) Vgrid[x][y]=0;
+            }
+        }
+        for (var x=0;x<space;x++) {
+            for (var y=0;y<10;y++) {
+                if (y!=yi||(xi<x||xi-size>=x)) Hgrid[x][y]=0;
+            }
+        }
+        balance();
+    };
+}    
+var simIndex=function(a1,a2) {
+    var total=0;
+    var i=0;
+    for (var x=0;x<a1.length;x++) {
+        i+=Math.min(a1[x],a2[x]);
+        total+=Math.max(a1[x],a2[x]);
+    }
+    return i/total;
+};
+function pattern(size,getPatternCode,shipHistory) {
+    this.getPatternCode=getPatternCode;
+    this.size=size;
+    //Number of expected hits in each part of pattern, also num currently found
+    this.densities=[]; this.densities.length=this.size;
+    this.numFound=[]; this.numFound.length=this.size;
+    for (var x=0;x<size;x++) {
+        this.numFound[x]=0;
+        this.densities[x]=1;
+    }
+    var shipLengths=[5,4,3,3,2];
+    var processShip=function(shipSize,startSquare) {
+        var result=[]; result.length=shipSize;
+        var downward=false;
+        if (startSquare>=100) {
+            downward=true;
+        }
+        var square=startSquare;
+        for (var x=0;x<shipSize;x++) {
+            result[x]=getPatternCode(square);
+            if (downward) square+=10;
+            else square++;
+        }
+        return result;
+    };
+        //Count up all times each ship square was in each pattern
+    for (var x=0;x<shipHistory.length;x++) {
+        for (var y=0;y<shipLengths.length;y++) {
+            var patternArray=processShip(shipLengths[y],shipHistory[x][y]);
+            for (var z=0;z<shipLengths[y];z++) this.densities[patternArray[z]]+=0.01;
+        }
+    }
+    //Now see if there are similarites spaced n games apart with regard to this pattern
+    for (var n=1;n<11;n++) {
+        var iterations=shipHistory.length-n; //Number of pairs of games to compare
+        var similarity=0; //How similar are positions n games apart with regard to this pattern
+        if (shipHistory.length>n+2) {
+            for (var x=n;x<shipHistory.length;x++) {
+                //Compare game x to game x-n
+                var xPattern=[]; xPattern.length=this.size;
+                var xnPattern=[]; xnPattern.length=this.size;
+                for (var y=0;y<size;y++) {
+                    xPattern[y]=0;
+                    xnPattern[y]=0;
+                }
+                for (var y=0;y<shipLengths.length;y++) {
+                    var patternArray=processShip(shipLengths[y],shipHistory[x][y]);
+                    for (var z=0;z<shipLengths[y];z++) xPattern[patternArray[z]]++;
+                    patternArray=processShip(shipLengths[y],shipHistory[x-n][y]);
+                    for (var z=0;z<shipLengths[y];z++) xnPattern[patternArray[z]]++;
+                }
+                //Get similarity index
+                similarity+=((simIndex(xnPattern,xPattern))/iterations);
+            }
+        }
+        //Count up all times each ship square was in each pattern
+        if (n<=shipHistory.length) for (var y=0;y<shipLengths.length;y++) {
+            var patternArray=processShip(shipLengths[y],shipHistory[n-1][y]);
+            for (var z=0;z<shipLengths[y];z++) this.densities[patternArray[z]]+=similarity;
+        }
+    }
+}
+function distIndex(s1,s2,size1,size2) {
+        var result=3;
+        var square1=s1%100; 
+        var square2=s2%100;
+        var downward1=false;
+        if (s1>=100) {
+            downward1=true;
+        }
+        var downward2=false;
+        if (s2>=100) {
+            downward2=true;
+        }
+        var touchingSquares=0;
+        for (var x=0;x<size1;x++) {
+            var square2=s2%100;
+            for (var y=0;y<size2;y++) {
+                if ((square1+1===square2&&square1%10!=9)||(square2+1===square1&&square2%10!=9)||
+                square1+10===square2||square2+10===square1) touchingSquares++;
+                if (downward2) square2+=10;
+                else square2++;
+            }
+            if (downward1) square1+=10;
+            else square1++;
+        }
+        //At least 2 touching squares
+        if (touchingSquares>1) return 0;
+        //Exactly one touching square
+        if (touchingSquares===1) return 1;
+        //Ships not touching
+        
+        //Find if they are separated by only one square
+        square1=s1%100; 
+        square2=s2%100;
+        for (var x=0;x<size1;x++) {
+            var square2=s2%100;
+            for (var y=0;y<size2;y++) {
+                if ((square1+2===square2&&square1%10<9)||(square2+2===square1&&square2%10<9)||square1+20===square2||square2+20===square1||
+                (square1+11===square2&&square1%10!=9)||(square2+11===square1&&square2%10!=9)||(square1+9===square2&&square2%10!=9)||(square2+9===square1&&square1%10!=9)) return 2;
+                if (downward2) square2+=10;
+                else square2++;
+            }
+            if (downward1) square1+=10;
+            else square1++;
+        }
+        //2 open squares or more between them
+        return 3;
+}
+function Han(squares,opponent) {
+    var genSquares=[]; genSquares.length=100;
+    var shipHistory=[];
+    var genWeight=1;
+    var distIndexes=[0,0,0,0];
+    var patterns=[];
+    var thisHan=this;
+    var weights=[1,1,1,1,1];  //How heavily to weight ship grids
+    var sizes=[5,4,3,3,2];
+    var lastMove=0;
+    //
+    //  SET BASELINE
+    //
+    var remTargets=17;
+    var shipGrids=[];
+    var historyGrid=[[],[],[],[],[],[],[],[],[],[]];
+    for (var x=0;x<10;x++) {
+        historyGrid[x].length=10;
+        for (var y=0;y<10;y++) {
+            historyGrid[x][y]=false;
+        }
+    }
+    for (var x=0;x<5;x++) {
+        shipGrids[x]=new shipGrid(sizes[x],weights[x]);
+    }
+    var offenseGrid=[[],[],[],[],[],[],[],[],[],[]];
+    for (var x=0;x<10;x++) offenseGrid[x].length=10;
+    this.reset=function() {
+        distIndexes=[0,0,0,0];
+        counter=0;
+        genWeight=1;
+        for (var x=0;x<5;x++) {
+            shipGrids[x]=new shipGrid(sizes[x],weights[x]);
+        }
+        remTargets=17;
+        for (var x=0;x<10;x++) {
+            for (var y=0;y<10;y++) {
+                historyGrid[x][y]=false;
+            }
+        }
+    };
+    var ships=[];
+    var placeShip=function(theShip,homeSquare,downward) {
+        theShip.downward=downward;
+        theShip.numHits=0;
+        theShip.found=false;
+        theShip.homeTile=squares[homeSquare];
+        var tempSquare=homeSquare;
+        for (var x=0;x<theShip.size;x++) {
+            squares[tempSquare].shipz=theShip;
+            if (downward) tempSquare+=10;
+            else tempSquare++;
+        }
+    };
+    ships.push(new ship("carrier",5,squares[0]));
+    ships.push(new ship("battleship",4,squares[4]));
+    ships.push(new ship("submarine",3,squares[2]));
+    ships.push(new ship("destroyer",3,squares[23]));
+    ships.push(new ship("patrol boat",2,squares[19]));
+    this.squares=squares;
+    var counter=0;
+    this.retrieveInfo="";
+    var ringOf=function(x) {
+      if (x>=100) x-=100;
+      for (var z=0;z<5;z++) {
+        if (((x%10===4-z||x%10===5+z)||(Math.floor(x/10)===4-z||Math.floor(x/10)===5+z))&&
+            ((x%10>=4-z&&x%10<=5+z)&&(Math.floor(x/10)>=4-z&&Math.floor(x/10)<=5+z))) return z;
+      }
+    };
+    var tooCentral=function(size,ring,homeTile,downward) {
+      var tile=homeTile;
+      for (var x=0;x<size;x++) {
+        if (ringOf(tile)<ring) return true;
+        if (downward) tile+=10;
+        else tile+=1;
+      }
+      return false;
+    };
+    this.placeShips=function() {
+        //Fetch info on past opponent ship placement
+        var data1 = {};
+        data1['username'] = opponent;
+        data1['weight'] = 0.25;
+        $.ajax({method: 'POST', url: 'getShipData2.php', async: false,
+        data: data1,success: function(data) {
+         thisHan.retrieveInfo=data;
+        }});
+        var rawData=thisHan.retrieveInfo.split("<br>");
+        for (var x=0;x<100;x++) {
+            genSquares[x]=parseInt(rawData[x]);
+        }
+        var genHoriz=parseInt(rawData[100]);
+        var genVert=parseInt(rawData[101]);
+        for (var x=0;x<20;x++) {
+            var row=rawData[102+x].split(" ");
+            if (parseInt(row[0])<0) break;
+            genWeight-=0.05;
+            shipHistory[x]=[parseInt(row[0]),parseInt(row[1]),parseInt(row[2]),parseInt(row[3]),parseInt(row[4])];
+        }
+        if (genWeight<1) {
+            //Horizontal/vertical pattern
+            patterns[0]=new pattern(2,function(x) {if (x<100) return 0; return 1; } ,shipHistory);
+            //Ring pattern
+            patterns[1]=new pattern(5,ringOf,shipHistory);
+            
+            //Row
+            patterns[2]=new pattern(10,function(x) {return Math.floor((x%100)/10); } ,shipHistory);
+            //Column
+            patterns[3]=new pattern(10,function(x) {return x%10; } ,shipHistory);
+            //Top/Bottom
+            patterns[4]=new pattern(2,function(x) {return Math.floor((x%100)/50); } ,shipHistory);
+            //L/R
+            patterns[5]=new pattern(2,function(x) {if (x%10<5) return 0; return 1; } ,shipHistory);
+            
+            //Pattern for nearest ship
+            
+        //Count up all times each ship square was in each pattern
+            for (var x=0;x<shipHistory.length;x++) {
+                for (var y=0;y<sizes.length;y++) {
+                    for (var z=y+1;z<sizes.length;z++) {
+                        distIndexes[distIndex(shipHistory[x][y],shipHistory[x][z],sizes[y],sizes[z])]+=0.01;
+                    }
+                }
+            }
+            
+            //Now see if there are similarites spaced n games apart with regard to this pattern
+            for (var n=1;n<11;n++) {
+                var iterations=shipHistory.length-n; //Number of pairs of games to compare
+                var similarity=0; //How similar are positions n games apart with regard to this pattern
+                if (shipHistory.length>n+2) {
+                    for (var x=n;x<shipHistory.length;x++) {
+                        //Compare game x to game x-n
+                        var xPattern=[]; xPattern.length=4;
+                        var xnPattern=[]; xnPattern.length=4;
+                        for (var y=0;y<4;y++) {
+                            xPattern[y]=0;
+                            xnPattern[y]=0;
+                        }
+                        for (var y=0;y<sizes.length;y++) {
+                            for (var z=y+1;z<sizes.length;z++) {
+                                xPattern[distIndex(shipHistory[x][y],shipHistory[x][z],sizes[y],sizes[z])]+=1;
+                                xnPattern[distIndex(shipHistory[x-n][y],shipHistory[x-n][z],sizes[y],sizes[z])]+=1;
+                            }
+                        }
+                        //Get similarity index
+                        similarity+=((simIndex(xnPattern,xPattern))/iterations);
+                    }
+                }
+                //Count up all times each ship square was in each pattern
+                if (n<=shipHistory.length) for (var y=0;y<sizes.length;y++) {
+                    for (var z=y+1;z<sizes.length;z++) {
+                        distIndexes[distIndex(shipHistory[n-1][y],shipHistory[n-1][z],sizes[y],sizes[z])]+=similarity;
+                    }
+                }
+            }
+        }
+        var genSum=genHoriz+genVert;
+        if (genWeight<=0) for (var x=0;x<5;x++)  shipGrids[x].changeHWeight(patterns[0].densities[0]/17);
+        else if (genWeight==1) for (var x=0;x<5;x++)  shipGrids[x].changeHWeight(genHoriz/genSum);
+        else for (var x=0;x<5;x++)  shipGrids[x].changeHWeight((1-genSum)*patterns[0].densities[0]/17+genWeight*(genHoriz/genSum));
+        genSum=0;
+        for (var x=0;x<100;x++) genSum+=genSquares[x];
+        if (genSum>0) for (var x=0;x<100;x++) genSquares[x]/=genSum;
+        var dSum=0;
+        for (var x=0;x<4;x++) dSum+=distIndexes[x];
+        if (dSum>1) for (var x=0;x<4;x++) distIndexes[x]/=dSum;
+        //Now place ships
+        data1['weight'] = 0.25;
+        $.ajax({method: 'POST', url: 'fetchAttackData.php', async: false,
+        data: data1,success: function(data) {
+         thisHan.retrieveInfo=data;
+        }});
+        var indSquares=thisHan.retrieveInfo.split("<br>");
+        var defGrid=[];
+        defGrid.length=100;
+        var defSum=0;
+        for (var x=0;x<100;x++) {
+            defGrid[x]=parseInt(indSquares[x]);
+        }
+        var rings=[];
+        rings.length=5;
+        var maxRing=0;
+        for (var z=0;z<5;z++) {
+            rings[z]=0;
+            for (var x=0;x<100;x++) {
+                if (((x%10===4-z||x%10===5+z)||(Math.floor(x/10)===4-z||Math.floor(x/10)===5+z))&&
+                ((x%10>=4-z&&x%10<=5+z)&&(Math.floor(x/10)>=4-z&&Math.floor(x/10)<=5+z))) rings[z]+=defGrid[x];
+            }
+            if (rings[z]>maxRing) maxRing=rings[z];
+        }
+        maxRing++;
+        for (var z=0;z<5;z++) {rings[z]=maxRing-rings[z];}
+        rings[0]=Math.ceil(rings[0]/30);
+        rings[1]=Math.ceil(rings[1]/15);
+        rings[2]=Math.ceil(rings[2]/10);
+        rings[3]=Math.ceil(rings[3]/7);
+        rings[4]=Math.ceil(rings[4]/5);
+        for (var r=0;r<5;r++) {
+            defSum+=rings[r];
+        }
+        for (var z=0;z<5;z++) {
+            var placed=false;
+            while(!placed) {
+                var r=0;
+                var ring=Math.floor(Math.random()*defSum);
+                while(ring>=0) {
+                    ring-=rings[r];
+                    r++;
+                }
+                r--;
+                var x=-1;
+                while(!(((x%10===4-r||x%10===5+r)||(Math.floor(x/10)===4-r||Math.floor(x/10)===5+r))&&
+                ((x%10>=4-r&&x%10<=5+r)&&(Math.floor(x/10)>=4-r&&Math.floor(x/10)<=5+r)))) {
+                    x=Math.floor(Math.random()*100);
+                }
+                //try to place on square x
+                if (squares[x].shipz) continue;
+                var validPlacements=2*sizes[z];
+                var HPlacements=[];
+                var VPlacements=[];
+                HPlacements.length=VPlacements.length=sizes[z];
+                for (var y=0;y<sizes[z];y++) {
+                    //Sanity Check, must be in grid/can't overlap
+                    if ((x-10*y>=0)&&validPlacement(ships[z],true,squares[x-10*y])) VPlacements[y]=true;
+                    else {validPlacements--; VPlacements[y]=false;}
+                    if ((x-y>=0&&x%10-y>=0)&&validPlacement(ships[z],false,squares[x-y])) HPlacements[y]=true;
+                    else {validPlacements--; HPlacements[y]=false;}
+                    //reject it if it's too central
+                    if (VPlacements[y]&&tooCentral(sizes[z],r,x-10*y,true)) {validPlacements--; VPlacements[y]=false;}
+                    if (HPlacements[y]&&tooCentral(sizes[z],r,x-y,false)) {validPlacements--; HPlacements[y]=false;}
+                    var numOverlap=0;
+                    //horiz
+                    if (HPlacements[y]) {
+                        for (var w=0;w<sizes[z];w++) {
+                            if ((x-y+10+w>=0&&x-y+10+w<100)&&squares[x-y+10+w].shipz) numOverlap++;
+                            if ((x-y-10+w>=0&&x-y-10+w<100)&&squares[x-y-10+w].shipz) numOverlap++;
+                        }
+                        if ((x-y)%10!==0&&squares[x-y-1].shipz) numOverlap+=2;
+                        if ((x-y+sizes[z]-1)%10!==9&&squares[x-y+sizes[z]].shipz) numOverlap+=2;
+                        if (numOverlap>1||numOverlap===1&&Math.random()<0.7) {HPlacements[y]=false; validPlacements--;}
+                    }
+                    numOverlap=0;
+                    //vert
+                    if (VPlacements[y]) {
+                        for (var w=0;w<sizes[z];w++) {
+                            if ((x%10!==9)&&squares[x-10*y+1+10*w].shipz) numOverlap++;
+                            if ((x%10!==0)&&squares[x-10*y-1+10*w].shipz) numOverlap++;
+                        }
+                        if (x-10*y-10>=0&&squares[x-10*y-10].shipz) numOverlap+=2;
+                        if (x-10*y+10*sizes[z]<100&&squares[x-10*y+10*sizes[z]].shipz) numOverlap+=2;
+                        if (numOverlap>1||numOverlap===1&&Math.random()<0.7) {VPlacements[y]=false; validPlacements--;}
+                    }
+                }
+                if (validPlacements===0) continue;
+                var placement=Math.floor(Math.random()*validPlacements);
+                for (var y=0;y<sizes[z]&&placement>=0;y++) if (HPlacements[y]) placement--;
+                if (placement<0) {placeShip(ships[z],x-y+1,false);placed=true;}
+                else {
+                    for (var y=0;y<sizes[z]&&placement>=0;y++) if (VPlacements[y]) placement--;
+                    placeShip(ships[z],x-10*y+10,true);
+                }
+                placed=true;                
+            }
+        }
+    };
+    var refreshGrid=function() {
+        for (var x=0;x<10;x++) {
+            for (var y=0;y<10;y++) {
+                offenseGrid[x][y]=0;
+                if (!historyGrid[x][y]) {
+                    for (var z=0;z<5;z++) {
+                        offenseGrid[x][y]+=shipGrids[z].prob(x,y);
+                    }
+                }
+            }
+        }
+    };
+    var applyPatterns=function() {
+        //Apply general statistics
+        for (var y=0;y<10;y++) {
+            for (var z=0;z<10;z++) {
+                offenseGrid[y][z]*=1+(3*genWeight*genSquares[10*y+z]);
+            }
+        }
+        if (genWeight<1) { //If there's actually pattern data to apply
+            //Apply patterns
+            for (var x=1;x<patterns.length;x++) {
+                for (var y=0;y<10;y++) {
+                    for (var z=0;z<10;z++) {
+                        var expectedRemaining=patterns[x].densities[patterns[x].getPatternCode(10*y+z)]-patterns[x].numFound[patterns[x].getPatternCode(10*y+z)];
+                        offenseGrid[y][z]*=0.01+(expectedRemaining*((1-genWeight)/5));
+                    }
+                }
+            }
+        }
+        //checkerboard search pattern
+        var hunt=false;
+        for (var x=0;x<5;x++) if (shipGrids[x].hunt()) {hunt=true; break;}
+        if (!hunt) {
+            var attackedSquares=[0,0];
+            var checkered=0;
+            for (var x=0;x<10;x++) {
+                for (var y=0;y<10;y++) {
+                    if (historyGrid[x][y]) attackedSquares[checkered]++;
+                    checkered=(checkered+1)%2;
+                }
+                checkered=(checkered+1)%2;
+            }
+            var result=-1;
+            checkered=0;
+            if (attackedSquares[0]>attackedSquares[1]) result=0;
+            if (attackedSquares[0]<attackedSquares[1]) result=1;
+            if (result>=0) {
+                for (var x=0;x<10;x++) {
+                    for (var y=0;y<10;y++) {
+                        if (!hunt&&checkered!=result) offenseGrid[x][y]=0;
+                        if (hunt&&checkered!=result) offenseGrid[x][y]/=1.5;
+                        checkered=(checkered+1)%2;
+                    }
+                    checkered=(checkered+1)%2;
+                }
+            }
+        }
+    };
+    var chooseSquare=function() {
+        var bestChoice=0;
+        var bestProb=0;
+        var currentSquare=0;
+        for (var x=0;x<10;x++) {
+            for (var y=0;y<10;y++) {
+                if (offenseGrid[x][y]>bestProb) {
+                    bestProb=offenseGrid[x][y];
+                    bestChoice=currentSquare;
+                }
+                currentSquare++;
+            }
+        }
+        return bestChoice;
+    };
+    this.nextMove=function() {
+        refreshGrid();
+        applyPatterns();
+        for (var x=0;x<10;x++) {
+            for (var y=0;y<10;y++) {
+                if (offenseGrid[x][y]>0) offenseGrid[x][y]*=(1+(Math.random()-0.5)/1000);
+            }
+        }
+        lastMove=chooseSquare();
+        historyGrid[Math.floor(lastMove/10)][lastMove%10]=true;
+        //alert(offenseGrid[Math.floor(lastMove/10)][lastMove%10]);
+        //for (var z=0;z<5;z++) shipGrids[z].shout();
+        return lastMove;
+    };
+    this.feedback=function(shipCode) {
+        if (!shipCode) shipCode=" ";
+        else shipCode=shipCode.name;
+        var x=Math.floor(lastMove/10);
+        var y=lastMove%10;
+        if (shipCode!=" ") {
+            remTargets--;
+        }
+        else {
+            if (genWeight<1) {
+                for (var z=1;z<patterns.length;z++) {
+                if (patterns[z].densities[patterns[z].getPatternCode(lastMove)]>10) patterns[z].densities[patterns[z].getPatternCode(lastMove)]/=3;
+                if (patterns[z].densities[patterns[z].getPatternCode(lastMove)]>5) patterns[z].densities[patterns[z].getPatternCode(lastMove)]/=2;
+                    patterns[z].densities[patterns[z].getPatternCode(lastMove)]/=(1+(0.2*patterns[z].size));
+                }
+            }
+        }
+        var sunkShip=-1;
+        var ss_size=0;
+        if (shipCode.charAt(0)=='c') {
+            shipGrids[0].needs(x,y);
+            if (shipGrids[0].isSunk()) sunkShip=shipGrids[0].getRemainingOption();
+            ss_size=5;
+        }
+        else shipGrids[0].eliminate(x,y);
+        if (shipCode.charAt(0)=='b') {
+            shipGrids[1].needs(x,y);
+            if (shipGrids[1].isSunk()) sunkShip=shipGrids[1].getRemainingOption();
+            ss_size=4;
+        }
+        else shipGrids[1].eliminate(x,y);
+        if (shipCode.charAt(0)=='s') {
+            shipGrids[2].needs(x,y);
+            if (shipGrids[2].isSunk()) sunkShip=shipGrids[2].getRemainingOption();
+            ss_size=3;
+        }
+        else shipGrids[2].eliminate(x,y);
+        if (shipCode.charAt(0)=='d') {
+            shipGrids[3].needs(x,y);
+            if (shipGrids[3].isSunk()) sunkShip=shipGrids[3].getRemainingOption();
+            ss_size=3;
+        }
+        else shipGrids[3].eliminate(x,y);
+        if (shipCode.charAt(0)=='p') {
+            shipGrids[4].needs(x,y);
+            if (shipGrids[4].isSunk()) sunkShip=shipGrids[4].getRemainingOption();
+            ss_size=2;
+        }
+        else shipGrids[4].eliminate(x,y);
+        if (sunkShip>=0) {
+            for (var x=0;x<5;x++) shipGrids[x].applyOtherShip(sunkShip,ss_size,distIndexes);
+        }
+    };
+    attackFunction=function(turns) {
+        if (turns===0) return 1600;
+        if (turns===1) return 1200;
+        if (turns<=10) return 800-50*turns;
+        if (turns>35) return 0;
+        return 300-8*turns;
+    };
+    this.attacked=function(x) {
+        var value=attackFunction(counter);
+        counter++;
+        var data1 = {};
+        data1['username'] = opponent;
+        data1["function"]=value;
+        data1["square"]=x;
+      $.ajax({method: 'POST', url: 'attackDataWriter.php',
+      data: data1});
+        
+    };
+}
+function GameController(username) {
+    this.user=username;
+    var gameActive=false;
+    document.getElementById("SideTable").style.display="block";
+    var gc=this;
+    function mayAttack(tile) {
+        if (gc.placement||tile.attacked||gc.playerTurn===false) return false;
+        return true;
+    }
+    function OverHanSquare() {
+        if (mayAttack(this)) this.style.background="url('QMover.bmp')";
+    }
+    function OutHanSquare() {
+        if (mayAttack(this)) this.style.background="url('QM.bmp')";
+    }
+    function ClickHanSquare() {
+        if (mayAttack(this)) this.style.background="url('QMclick.bmp')";
+    }
+    function UnclickHanSquare(x) {
+        if (mayAttack(HanBoardSquares[x])) {
+            gc.playerTurn=false;
+            gc.attackEnemyCell(x);
+        }
+    }
+    function OverPlacementSquare(s,t) {
+        if (s.current) s.current.draw(t);
+        else if ((t.shipz)&&(/green/.test(t.style.background)))
+            t.style.background=t.style.background.replace("green","yellow");
+    }
+    function OutPlacementSquare(s,t) {
+        if (!s.current&&(t.shipz)&&(/yellow/.test(t.style.background))) 
+            t.style.background=t.style.background.replace("yellow","green");
+        else {
+            undraw(s.current,s.current.downward,this);
+        }
+    }
+    function ClickPlacementSquare(s,t) {
+        if (s.current&&(/green/.test(t.style.background))&&(t.shipz==s.current)) {
+            s.current.draw(t);
+            s.current="";
+            t.style.background=t.style.background.replace("green","yellow");
+        }
+        else if (!s.current&&(/yellow/.test(t.style.background))) {
+            s.current=t.shipz;
+        }
+        if ((this.shipz)&&(/yellow/.test(t.style.background))) 
+            this.style.background=t.style.background.replace("yellow","green");
+    }
+    function checkPlacement(ships,clicked) {
+        if (clicked.current) {
+            document.getElementById("startButton").disabled=true;
+            return;
+        }
+        for (var x=0;x<ships.length;x++) {
+            if (ships[x].homeTile.className==="sideCell") {
+                document.getElementById("startButton").disabled=true;
+                return;
+            }
+        }
+        document.getElementById("startButton").disabled=false;
+    }
+    this.attackFriendlyCell=function(x) {
+        var tempBC=PlayerSquares[x].style.background;
+        han.feedback(PlayerSquares[x].shipz);
+        setTimeout(function() {PlayerSquares[x].style.background="White";},200);
+        setTimeout(function() {PlayerSquares[x].style.background=tempBC;},400);
+        setTimeout(function() {PlayerSquares[x].style.background="White";},600);
+        setTimeout(function() {PlayerSquares[x].style.background=tempBC;},800);
+        setTimeout(function() {
+            if (!(PlayerSquares[x].shipz)) PlayerSquares[x].style.background="White";
+            else {
+                if (PlayerSquares[x].shipz.numHits===0) PlayerSquares[x].shipz.yellowify();
+                PlayerSquares[x].shipz.hit(PlayerSquares[x]);
+            }
+        },1000);
+    };
+    this.attackEnemyCell=function(x) {
+        document.getElementById("line1").innerHTML="You shot at "+
+            HanBoardSquares[x].id.charAt(2)+letterToInt(intToLetter(HanBoardSquares[x].id.charAt(3)))+'.';
+        HanBoardSquares[x].attacked=true;
+        han.attacked(x);
+        if (!HanBoardSquares[x].shipz) {
+            HanBoardSquares[x].style.background="White";
+            document.getElementById("line2").innerHTML="You missed!";
+        }
+        else {
+            HanBoardSquares[x].shipz.numHits++;
+            if (HanBoardSquares[x].shipz.numHits<HanBoardSquares[x].shipz.size) {
+                HanBoardSquares[x].style.background="Orange";
+                document.getElementById("line2").innerHTML="You hit Han's "+HanBoardSquares[x].shipz.name+"!";
+            }
+            else {
+                gc.hanShipsLeft--;
+                HanBoardSquares[x].shipz.drawDeadShip();
+                document.getElementById("line2").innerHTML="You sunk Han's "+HanBoardSquares[x].shipz.name+"!";
+            }
+        }
+        if (gc.hanShipsLeft===0) gc.endGame(true);
+        else {
+            var lastHanMove=han.nextMove();
+            this.attackFriendlyCell(lastHanMove);
+            document.getElementById("line3").innerHTML="Han shot at "+
+                PlayerSquares[lastHanMove].id.charAt(2)+letterToInt(intToLetter(PlayerSquares[lastHanMove].id.charAt(3)))+'.';
+            if (!PlayerSquares[lastHanMove].shipz) document.getElementById("line4").innerHTML="Han missed!";
+            else {
+                PlayerSquares[lastHanMove].shipz.numHits++;
+                if (PlayerSquares[lastHanMove].shipz.numHits<PlayerSquares[lastHanMove].shipz.size) 
+                    document.getElementById("line4").innerHTML="Han hit your "+PlayerSquares[lastHanMove].shipz.name+'!';
+                else {
+                    gc.playerShipsLeft--;
+                    document.getElementById("line4").innerHTML="Han sunk your "+PlayerSquares[lastHanMove].shipz.name+'!';
+                }
+            }
+            if (gc.playerShipsLeft===0) gc.endGame(false);
+            else this.playerTurn=true;
+        }
+    };
+    
+    
+    this.gameOver=false;
+    this.placement=true;
+    var HanBoardSquares=document.querySelectorAll(".enemyCell");
+    var PlayerSquares=document.querySelectorAll(".friendlyCell");
+    var SideSquares=document.querySelectorAll(".sideCell");
+    var PShips=[];
+    var hanShips=[];
+    for (var x=0;x<100;x++) {
+        HanBoardSquares[x].tileNum=x;
+        HanBoardSquares[x].attacked=false;
+        HanBoardSquares[x].style.background="url('QM.bmp')";
+        HanBoardSquares[x].addEventListener("mouseover", OverHanSquare);
+        HanBoardSquares[x].addEventListener("mouseout", OutHanSquare);
+        HanBoardSquares[x].addEventListener("mousedown", ClickHanSquare);
+        HanBoardSquares[x].addEventListener("mouseup", function() {UnclickHanSquare(this.tileNum);});
+    }
+    var han=new Han(HanBoardSquares,username);
+    PShips.push(new ship("carrier",5,SideSquares[0]));
+    PShips.push(new ship("battleship",4,SideSquares[4]));
+    PShips.push(new ship("submarine",3,SideSquares[2]));
+    PShips.push(new ship("destroyer",3,SideSquares[23]));
+    PShips.push(new ship("patrol boat",2,SideSquares[19]));
+    
+    for (var x=0;x<PShips.length;x++) PShips[x].draw(PShips[x].homeTile);
+    
+    //Place ships
+    
+    var clickedShip={};
+    clickedShip.current="";
+    for (var x=0;x<100;x++) {
+      PlayerSquares[x].addEventListener("mouseover", function() {if (gc.placement) {OverPlacementSquare(clickedShip,this);}});
+      PlayerSquares[x].addEventListener("mouseout", function() {if (gc.placement) {OutPlacementSquare(clickedShip,this);}});
+      PlayerSquares[x].addEventListener("mousedown", function() {if (gc.placement) {ClickPlacementSquare(clickedShip,this);checkPlacement(PShips,clickedShip);}});
+    }
+    for (var x=0;x<30;x++) {
+        SideSquares[x].addEventListener("mouseover", function() {OverPlacementSquare(clickedShip,this);});
+        SideSquares[x].addEventListener("mouseout", function() {OutPlacementSquare(clickedShip,this);});
+        SideSquares[x].addEventListener("mousedown", function() {ClickPlacementSquare(clickedShip,this);checkPlacement(PShips,clickedShip);});
+    }
+    document.addEventListener("keypress",function(e) {
+        if ((e.charCode===82||e.charCode===114)&&clickedShip.current) {
+            undraw(clickedShip.current,clickedShip.current.downward,clickedShip.current.homeTile);
+            clickedShip.current.downward=!(clickedShip.current.downward);
+            clickedShip.current.draw(clickedShip.current.homeTile);
+        }
+    });
+    this.uploadShipPositions=function() {
+        var data1 = {};
+        for (var x=0;x<100;x++) {
+            if (PlayerSquares[x].shipz&&PlayerSquares[x].shipz.homeTile==PlayerSquares[x]) {
+                data1[PlayerSquares[x].shipz.name.charAt(0)]=x;
+                if (PlayerSquares[x].shipz.downward) data1[PlayerSquares[x].shipz.name.charAt(0)]+=100;
+            }
+        }
+        data1['username'] = gc.user;
+      $.ajax({method: 'POST', url: 'shipPositionsUpdate2.php',
+      data: data1});
+    }
+    this.hanShipsLeft=this.playerShipsLeft=5;
+    document.getElementById("line1").innerHTML = "Place your ships.";
+    document.getElementById("line2").innerHTML = "Click on a ship's green square to pick it up then again to place it. Use R to rotate ships.";
+    document.getElementById("line3").innerHTML = "When you're ready click the button below.";
+    document.getElementById("line4").innerHTML = "<button id='startButton' disabled=true>Begin</button>";
+    document.getElementById("startButton").addEventListener("click",function() {gc.startGame();});
+    
+    
+    this.startGame=function() {
+        var data1 = {};
+        data1['username'] = gc.user;
+      $.ajax({method: 'POST', url: 'addGame.php',
+      data: data1});
+        window.onbeforeunload=function() {return 'Warning: If you leave this page now you forfeit the game.';};
+        gameActive=true;
+        document.getElementById("SideTable").style.display="none";
+        this.playerTurn=false;
+        this.placement=false;
+        for (var x=0;x<PShips.length;x++) PShips[x].removeGreen();
+        hanShips=han.placeShips(HanBoardSquares);
+        this.uploadShipPositions();
+        var lastHanMove;
+        if (Math.random()<0.5) {
+            lastHanMove=han.nextMove();
+            this.attackFriendlyCell(lastHanMove);
+            document.getElementById("line1").innerHTML="Han shot first!";
+            document.getElementById("line2").innerHTML="Han shot at "+
+                PlayerSquares[lastHanMove].id.charAt(2)+letterToInt(intToLetter(PlayerSquares[lastHanMove].id.charAt(3)))+'.';
+            if (!PlayerSquares[lastHanMove].shipz) document.getElementById("line3").innerHTML="Han missed!";
+            else {
+                document.getElementById("line3").innerHTML="Han hit your "+PlayerSquares[lastHanMove].shipz.name+'!';
+                PlayerSquares[lastHanMove].shipz.numHits++;
+            }
+            document.getElementById("line4").innerHTML="Click one of Han's squares to attack.";
+            this.playerTurn=true;
+        }
+        else {
+            this.playerTurn=true;
+            document.getElementById("line1").innerHTML="You shoot first.";
+            document.getElementById("line2").innerHTML="Click one of Han's squares to attack.";
+            document.getElementById("line3").innerHTML=document.getElementById("line4").innerHTML="<br>";
+        
+        }
+    };
+    this.endGame=function(playerWin) {
+        window.onbeforeunload=function() {};
+      gameActive=false;
+      for (var x=0;x<100;x++) {
+          if (HanBoardSquares[x].shipz) {
+            HanBoardSquares[x].shipz.reveal(HanBoardSquares[x],HanBoardSquares[x].attacked);
+          }
+            else if (!HanBoardSquares[x].attacked) HanBoardSquares[x].style.background="";
+      }
+        if (playerWin) {
+            document.getElementById("line3").innerHTML="Han has no ships left! You win!";
+            document.getElementById("line4").innerHTML = "<button id='resetButton'>Play Again?</button>";
+      $.ajax({method: 'POST', url: 'addWin.php',
+      data: {
+        'username': gc.user,
+        'ajax': true
+      },});
+          	
+        }
+        else { 
+            document.getElementById("line4").innerHTML+=" That was your last ship! You lose!";
+            document.getElementById("line5").innerHTML = "<button id='resetButton'>Play Again?</button>";
+          	
+          
+        }
+        setTimeout(function() {
+        document.getElementById("resetButton").addEventListener("click",function() {gc.reset();});
+        },1000);
+    };
+  this.reset=function() {
+      gc.placement=true;
+        document.getElementById("SideTable").style.display="block";
+        this.hanShipsLeft=this.playerShipsLeft=5;
+        han.reset();
+        for (var x=0;x<5;x++) {
+            undraw(PShips[x],PShips[x].downward,PShips[x].homeTile);
+            PShips[x].reset();
+        }
+        for (var x=0;x<100;x++) {
+            PlayerSquares[x].style.background="";
+            HanBoardSquares[x].style.background="url('QM.bmp')";
+            HanBoardSquares[x].attacked=PlayerSquares[x].attacked=false;
+            HanBoardSquares[x].shipz=null;
+        }
+        PShips[0].draw(SideSquares[0]);
+        PShips[1].draw(SideSquares[4]);
+        PShips[2].draw(SideSquares[2]);
+        PShips[3].draw(SideSquares[23]);
+        PShips[4].draw(SideSquares[19]);
+        document.getElementById("line1").innerHTML = "Place your ships.";
+        document.getElementById("line2").innerHTML = "Click on a ship's green square to pick it up then again to place it. Use R to rotate ships.";
+        document.getElementById("line3").innerHTML = "When you're ready click the button below.";
+        document.getElementById("line4").innerHTML = "<button id='startButton' disabled=true>Begin</button>";
+        document.getElementById("line5").innerHTML = "<br>";
+        document.getElementById("startButton").addEventListener("click",function() {gc.startGame();});
+  };
+}
+
+init();
+</script>
+
+</body>
+</html>
